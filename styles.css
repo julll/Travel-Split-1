@@ -1,6 +1,5 @@
-/* TravelSplit - Основные стили */
+/* Travel Split - Main Styles */
 
-/* Сброс стилей и базовые настройки */
 * {
     margin: 0;
     padding: 0;
@@ -8,783 +7,305 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
-    color: #2d3748;
+    color: #333;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
 }
 
-/* Контейнер */
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
-    min-height: 100vh;
 }
 
-/* Заголовок приложения */
-.header {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    padding: 30px;
-    margin-bottom: 30px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.header-content {
+/* Header */
+header {
     text-align: center;
-    margin-bottom: 20px;
-}
-
-.app-title {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #4a5568;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-}
-
-.app-title i {
-    color: #667eea;
-    font-size: 2.2rem;
-}
-
-.app-subtitle {
-    font-size: 1.1rem;
-    color: #718096;
-    font-weight: 400;
-}
-
-/* Панель управления данными */
-.data-controls {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-/* Основной контент */
-.main-content {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-}
-
-/* Секция создания поездки */
-.create-trip-section {
-    text-align: center;
-}
-
-.btn-large {
-    padding: 20px 40px;
-    font-size: 1.2rem;
-    border-radius: 15px;
-    min-width: 280px;
-}
-
-/* Секция поездок */
-.trips-section {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    padding: 30px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.section-title {
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: #4a5568;
-    margin-bottom: 25px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.section-title i {
-    color: #667eea;
-}
-
-/* Список поездок */
-.trips-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 20px;
-}
-
-/* Карточка поездки */
-.trip-card {
-    background: white;
-    border-radius: 15px;
-    padding: 25px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    border: 1px solid #e2e8f0;
-    cursor: pointer;
-    transition: all 0.3s ease;
+    margin-bottom: 40px;
+    color: white;
     position: relative;
-    overflow: hidden;
 }
 
-.trip-card::before {
-    content: '';
+header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+header p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+/* Firebase Badge */
+.firebase-badge {
     position: absolute;
     top: 0;
-    left: 0;
     right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #667eea, #764ba2);
-}
-
-.trip-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-}
-
-.trip-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 20px;
-}
-
-.trip-name {
-    font-size: 1.4rem;
-    font-weight: 600;
-    color: #2d3748;
-    margin: 0;
-    flex: 1;
-    margin-right: 15px;
-}
-
-.trip-actions {
-    display: flex;
-    gap: 8px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.trip-card:hover .trip-actions {
-    opacity: 1;
-}
-
-.trip-card-body {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.trip-location,
-.trip-dates {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: #718096;
-    font-size: 0.95rem;
-}
-
-.trip-location i,
-.trip-dates i {
-    color: #a0aec0;
-    width: 16px;
-}
-
-.trip-stats {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px solid #e2e8f0;
-}
-
-.stat {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.9rem;
-    color: #718096;
-}
-
-.stat i {
-    color: #a0aec0;
-    width: 14px;
-}
-
-.total-amount {
-    font-weight: 600;
-    color: #38a169;
-}
-
-/* Пустое состояние */
-.empty-state {
-    text-align: center;
-    padding: 60px 20px;
-    color: #a0aec0;
-}
-
-.empty-state i {
-    font-size: 4rem;
-    margin-bottom: 20px;
-    color: #cbd5e0;
-}
-
-.empty-state h3 {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-    color: #718096;
-}
-
-.empty-state p {
-    font-size: 1rem;
-    max-width: 400px;
-    margin: 0 auto;
-}
-
-/* Кнопки */
-.btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 10px;
-    font-size: 0.95rem;
-    font-weight: 500;
-    text-decoration: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    background: transparent;
-    white-space: nowrap;
-}
-
-.btn:hover {
-    transform: translateY(-2px);
-}
-
-.btn:active {
-    transform: translateY(0);
-}
-
-.btn-primary {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: white;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-}
-
-.btn-primary:hover {
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-}
-
-.btn-secondary {
-    background: #e2e8f0;
-    color: #4a5568;
-}
-
-.btn-secondary:hover {
-    background: #cbd5e0;
-}
-
-.btn-outline {
-    border: 2px solid #e2e8f0;
-    color: #4a5568;
-    background: rgba(255, 255, 255, 0.8);
-}
-
-.btn-outline:hover {
-    border-color: #cbd5e0;
-    background: white;
-}
-
-.btn-danger {
-    background: linear-gradient(135deg, #e53e3e, #fc8181);
-    color: white;
-}
-
-.btn-danger:hover {
-    box-shadow: 0 4px 15px rgba(229, 62, 62, 0.4);
-}
-
-.btn-sm {
-    padding: 8px 12px;
-    font-size: 0.85rem;
-}
-
-.btn-icon {
-    padding: 8px;
-    border-radius: 8px;
-    background: transparent;
-    border: none;
-    color: #a0aec0;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.btn-icon:hover {
-    background: #f7fafc;
-    color: #4a5568;
-}
-
-.btn-icon.btn-danger:hover {
-    background: #fed7d7;
-    color: #e53e3e;
-}
-
-/* Модальные окна */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(5px);
-    animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.modal-content {
-    background-color: white;
-    margin: 5% auto;
+    padding: 8px 16px;
     border-radius: 20px;
-    width: 90%;
-    max-width: 500px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    animation: slideIn 0.3s ease;
-    overflow: hidden;
-}
-
-@keyframes slideIn {
-    from {
-        transform: translateY(-50px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-.modal-large {
-    max-width: 700px;
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 25px 30px;
-    border-bottom: 1px solid #e2e8f0;
-    background: linear-gradient(135deg, #f7fafc, #edf2f7);
-}
-
-.modal-header h3 {
-    margin: 0;
-    font-size: 1.4rem;
-    font-weight: 600;
-    color: #2d3748;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.modal-header h3 i {
-    color: #667eea;
-}
-
-.close {
-    color: #a0aec0;
-    font-size: 28px;
+    font-size: 0.9rem;
     font-weight: bold;
-    cursor: pointer;
-    transition: color 0.3s ease;
-    line-height: 1;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
 
-.close:hover {
-    color: #4a5568;
+.firebase-badge.online {
+    background: #4CAF50;
+    color: white;
 }
 
-/* Формы */
-.modal-form {
+.firebase-badge.syncing {
+    background: #FF9800;
+    color: white;
+}
+
+.firebase-badge.offline {
+    background: #f44336;
+    color: white;
+}
+
+.firebase-badge.error {
+    background: #9C27B0;
+    color: white;
+}
+
+/* Main sections */
+section {
+    background: white;
+    border-radius: 15px;
     padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
+section h2 {
+    color: #4a5568;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+}
+
+/* Form styles */
 .form-group {
     margin-bottom: 20px;
 }
 
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
-
-.form-group label {
+label {
     display: block;
     margin-bottom: 8px;
-    font-weight: 500;
+    font-weight: 600;
     color: #4a5568;
 }
 
-.form-group input,
-.form-group select,
-.form-group textarea {
+input[type="text"],
+input[type="number"],
+select,
+textarea {
     width: 100%;
-    padding: 12px 16px;
+    padding: 12px;
     border: 2px solid #e2e8f0;
-    border-radius: 10px;
+    border-radius: 8px;
     font-size: 1rem;
-    transition: all 0.3s ease;
-    background: white;
+    transition: border-color 0.3s ease;
 }
 
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus,
+textarea:focus {
     outline: none;
     border-color: #667eea;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
-.form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 15px;
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 1px solid #e2e8f0;
-}
-
-/* Радио кнопки */
-.radio-group {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.radio-label {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    padding: 10px;
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 12px 24px;
+    border: none;
     border-radius: 8px;
-    transition: background-color 0.3s ease;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 5px;
 }
 
-.radio-label:hover {
-    background-color: #f7fafc;
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
 }
 
-.radio-label input[type="radio"] {
-    width: auto;
-    margin: 0;
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
 }
 
-/* Адаптивность */
+.btn-secondary {
+    background: #718096;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #4a5568;
+    transform: translateY(-2px);
+}
+
+.btn-danger {
+    background: #e53e3e;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #c53030;
+    transform: translateY(-2px);
+}
+
+.btn-small {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+}
+
+button[type="submit"] {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+button[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* Trip cards */
+.trips-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.trip-card {
+    background: #f7fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+.trip-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    border-color: #667eea;
+}
+
+.trip-card h3 {
+    color: #2d3748;
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+}
+
+.trip-card p {
+    margin-bottom: 10px;
+    color: #4a5568;
+}
+
+.trip-actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* Messages */
+.no-trips,
+.no-expenses,
+.no-balances {
+    text-align: center;
+    color: #718096;
+    font-style: italic;
+    padding: 40px 20px;
+    background: #f7fafc;
+    border-radius: 8px;
+    border: 2px dashed #e2e8f0;
+}
+
+.error {
+    color: #e53e3e;
+    text-align: center;
+    padding: 20px;
+    background: #fed7d7;
+    border-radius: 8px;
+    border: 1px solid #feb2b2;
+}
+
+.success {
+    color: #38a169;
+    text-align: center;
+    padding: 20px;
+    background: #c6f6d5;
+    border-radius: 8px;
+    border: 1px solid #9ae6b4;
+}
+
+/* Responsive design */
 @media (max-width: 768px) {
     .container {
         padding: 15px;
     }
 
-    .header {
-        padding: 20px;
-        margin-bottom: 20px;
-    }
-
-    .app-title {
+    header h1 {
         font-size: 2rem;
-        flex-direction: column;
-        gap: 10px;
     }
 
-    .data-controls {
-        gap: 10px;
-    }
-
-    .btn {
-        padding: 10px 16px;
-        font-size: 0.9rem;
-    }
-
-    .btn-large {
-        padding: 16px 24px;
-        font-size: 1.1rem;
-        min-width: auto;
-        width: 100%;
-    }
-
-    .trips-list {
-        grid-template-columns: 1fr;
-        gap: 15px;
-    }
-
-    .trip-card {
+    section {
         padding: 20px;
+    }
+
+    .firebase-badge {
+        position: static;
+        display: inline-block;
+        margin-top: 15px;
+    }
+
+    .trips-container {
+        grid-template-columns: 1fr;
     }
 
     .trip-actions {
-        opacity: 1;
-    }
-
-    .trip-stats {
         flex-direction: column;
-        gap: 8px;
-        align-items: flex-start;
     }
 
-    .modal-content {
-        margin: 10% auto;
-        width: 95%;
-    }
-
-    .modal-header {
-        padding: 20px;
-    }
-
-    .modal-form {
-        padding: 20px;
-    }
-
-    .form-row {
-        grid-template-columns: 1fr;
-        gap: 15px;
-    }
-
-    .form-actions {
-        flex-direction: column-reverse;
-    }
-
-    .form-actions .btn {
+    .btn {
         width: 100%;
-        justify-content: center;
+        margin: 5px 0;
     }
 }
 
 @media (max-width: 480px) {
-    .container {
-        padding: 10px;
-    }
-
-    .header {
-        padding: 15px;
-        border-radius: 15px;
-    }
-
-    .app-title {
+    header h1 {
         font-size: 1.8rem;
     }
 
-    .trips-section {
-        padding: 20px;
-        border-radius: 15px;
+    header p {
+        font-size: 1rem;
     }
 
-    .section-title {
+    section {
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    section h2 {
         font-size: 1.5rem;
     }
-
-    .trip-card {
-        padding: 15px;
-        border-radius: 12px;
-    }
-
-    .modal-content {
-        border-radius: 15px;
-    }
-
-    .modal-header {
-        padding: 15px;
-    }
-
-    .modal-form {
-        padding: 15px;
-    }
-}
-
-/* Firebase стили */
-.firebase-badge {
-    font-size: 0.8em;
-    margin-left: 8px;
-    opacity: 0.8;
-    animation: firebasePulse 2s infinite;
-}
-
-@keyframes firebasePulse {
-    0%, 100% { opacity: 0.8; }
-    50% { opacity: 1; transform: scale(1.1); }
-}
-
-.firebase-status {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-/* Индикатор статуса подключения */
-#connection-status {
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    padding: 8px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: bold;
-    z-index: 10000;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-}
-
-/* Уведомления Firebase */
-.firebase-notification {
-    position: fixed;
-    top: 60px;
-    right: 20px;
-    padding: 12px 20px;
-    border-radius: 8px;
-    color: white;
-    font-weight: 500;
-    z-index: 10000;
-    max-width: 300px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    animation: slideInRight 0.3s ease;
-}
-
-@keyframes slideInRight {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-/* Улучшенный заголовок с Firebase */
-.app-title {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.trip-header {
-    position: relative;
-}
-
-.trip-header .firebase-status {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-}
-
-/* Адаптивность для мобильных */
-@media (max-width: 768px) {
-    #connection-status {
-        font-size: 11px;
-        padding: 6px 10px;
-    }
-
-    .firebase-notification {
-        top: 50px;
-        right: 10px;
-        left: 10px;
-        max-width: none;
-    }
-
-    .trip-header .firebase-status {
-        top: 10px;
-        right: 10px;
-    }
-
-    .firebase-badge {
-        font-size: 0.7em;
-    }
-}
-
-/* Стили для статуса синхронизации */
-.sync-indicator {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 0.8rem;
-    color: #718096;
-    margin-left: 10px;
-}
-
-.sync-indicator.syncing {
-    color: #4299e1;
-}
-
-.sync-indicator.synced {
-    color: #38a169;
-}
-
-.sync-indicator.offline {
-    color: #e53e3e;
-}
-
-.sync-spinner {
-    width: 12px;
-    height: 12px;
-    border: 2px solid #e2e8f0;
-    border-radius: 50%;
-    border-top-color: #4299e1;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-
-/* Улучшенные кнопки с Firebase эффектами */
-.btn:hover .firebase-badge {
-    animation: firebasePulse 0.5s ease;
-}
-
-/* Индикатор реального времени */
-.realtime-indicator {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: rgba(66, 153, 225, 0.9);
-    color: white;
-    padding: 8px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: bold;
-    backdrop-filter: blur(10px);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 9999;
-}
-
-.realtime-indicator.show {
-    opacity: 1;
-}
-
-.realtime-indicator.updating {
-    background: rgba(56, 161, 105, 0.9);
-    animation: pulse 1s ease-in-out;
-}
-
-@keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
 }

@@ -3,152 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TravelSplit - Учёт расходов в поездках</title>
+    <title>Travel Split - Учет расходов в поездках</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <!-- Заголовок -->
-        <header class="header">
-            <div class="header-content">
-                <h1 class="app-title">
-                    <i class="fas fa-plane"></i>
-                    TravelSplit
-                    <span class="firebase-badge">🔥</span>
-                </h1>
-                <p class="app-subtitle">Учёт расходов в поездках с автосинхронизацией</p>
-            </div>
-
-            <!-- Панель управления данными (оставляем для резервного копирования) -->
-            <div class="data-controls">
-                <button class="btn btn-outline" onclick="exportData()" title="Экспорт данных">
-                    <i class="fas fa-download"></i> Экспорт
-                </button>
-                <button class="btn btn-outline" onclick="importData()" title="Импорт данных">
-                    <i class="fas fa-upload"></i> Импорт
-                </button>
-                <button class="btn btn-outline" onclick="shareData()" title="Поделиться данными">
-                    <i class="fas fa-share-alt"></i> Поделиться
-                </button>
-                <input type="file" id="import-file" accept=".json" style="display: none;">
-            </div>
+        <header>
+            <h1>🧳 Travel Split</h1>
+            <p>Простой учет общих расходов в поездках</p>
+            <div class="firebase-badge offline">🔴 Офлайн</div>
         </header>
 
-        <!-- Основной контент -->
-        <main class="main-content">
-            <!-- Кнопка создания поездки -->
-            <div class="create-trip-section">
-                <button class="btn btn-primary btn-large" onclick="showCreateTripModal()">
-                    <i class="fas fa-plus"></i>
-                    Создать новую поездку
-                </button>
-            </div>
+        <main>
+            <section class="create-trip">
+                <h2>Создать новую поездку</h2>
+                <form id="tripForm">
+                    <div class="form-group">
+                        <label for="tripName">Название поездки:</label>
+                        <input type="text" id="tripName" required placeholder="Например: Поездка в Прагу">
+                    </div>
 
-            <!-- Список поездок -->
-            <section class="trips-section">
-                <h2 class="section-title">
-                    <i class="fas fa-suitcase-rolling"></i>
-                    Мои поездки
-                </h2>
-                <div id="trips-list" class="trips-list">
-                    <!-- Поездки будут загружены динамически -->
+                    <div class="form-group">
+                        <label for="participants">Участники (через запятую):</label>
+                        <input type="text" id="participants" required placeholder="Например: Анна, Борис, Вера">
+                    </div>
+
+                    <button type="submit">Создать поездку</button>
+                </form>
+            </section>
+
+            <section class="trips-list">
+                <h2>Мои поездки</h2>
+                <div id="tripsList" class="trips-container">
+                    <p class="no-trips">Пока нет созданных поездок</p>
                 </div>
             </section>
         </main>
     </div>
 
-    <!-- Модальное окно создания поездки -->
-    <div id="create-trip-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-plus"></i> Создать поездку</h3>
-                <span class="close" onclick="hideCreateTripModal()">&times;</span>
-            </div>
-            <form id="create-trip-form" class="modal-form">
-                <div class="form-group">
-                    <label for="trip-name">Название поездки *</label>
-                    <input type="text" id="trip-name" name="name" required 
-                           placeholder="Например: Отпуск в Сочи">
-                </div>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
-                <div class="form-group">
-                    <label for="trip-location">Место</label>
-                    <input type="text" id="trip-location" name="location" 
-                           placeholder="Например: Сочи, Россия">
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="trip-start-date">Дата начала</label>
-                        <input type="date" id="trip-start-date" name="startDate">
-                    </div>
-                    <div class="form-group">
-                        <label for="trip-end-date">Дата окончания</label>
-                        <input type="date" id="trip-end-date" name="endDate">
-                    </div>
-                </div>
-
-                <div class="form-actions">
-                    <button type="button" class="btn btn-secondary" onclick="hideCreateTripModal()">
-                        Отмена
-                    </button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Создать
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Модальное окно редактирования поездки -->
-    <div id="edit-trip-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-edit"></i> Редактировать поездку</h3>
-                <span class="close" onclick="hideEditTripModal()">&times;</span>
-            </div>
-            <form id="edit-trip-form" class="modal-form">
-                <input type="hidden" id="edit-trip-id">
-
-                <div class="form-group">
-                    <label for="edit-trip-name">Название поездки *</label>
-                    <input type="text" id="edit-trip-name" name="name" required 
-                           placeholder="Например: Отпуск в Сочи">
-                </div>
-
-                <div class="form-group">
-                    <label for="edit-trip-location">Место</label>
-                    <input type="text" id="edit-trip-location" name="location" 
-                           placeholder="Например: Сочи, Россия">
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="edit-trip-start-date">Дата начала</label>
-                        <input type="date" id="edit-trip-start-date" name="startDate">
-                    </div>
-                    <div class="form-group">
-                        <label for="edit-trip-end-date">Дата окончания</label>
-                        <input type="date" id="edit-trip-end-date" name="endDate">
-                    </div>
-                </div>
-
-                <div class="form-actions">
-                    <button type="button" class="btn btn-secondary" onclick="hideEditTripModal()">
-                        Отмена
-                    </button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save"></i> Сохранить
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Подключение скриптов -->
-    <!-- 🔥 ИСПОЛЬЗУЕМ FIREBASE ВЕРСИЮ -->
+    <!-- App Scripts -->
     <script src="firebase-database.js"></script>
-    <script src="main.js"></script>
+    <script>
+        // Main app logic
+        let trips = [];
+
+        // Load trips on page load
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadAndDisplayTrips();
+        });
+
+        // Handle trip creation form
+        document.getElementById('tripForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const tripName = document.getElementById('tripName').value.trim();
+            const participantsInput = document.getElementById('participants').value.trim();
+
+            if (!tripName || !participantsInput) {
+                alert('Пожалуйста, заполните все поля');
+                return;
+            }
+
+            const participants = participantsInput.split(',').map(p => p.trim()).filter(p => p);
+
+            if (participants.length < 2) {
+                alert('Добавьте минимум 2 участников');
+                return;
+            }
+
+            const newTrip = {
+                id: TravelSplitDB.generateId(),
+                name: tripName,
+                participants: participants,
+                expenses: [],
+                createdAt: new Date().toISOString(),
+                lastModified: Date.now()
+            };
+
+            try {
+                await TravelSplitDB.saveTrip(newTrip);
+
+                // Clear form
+                document.getElementById('tripForm').reset();
+
+                // Reload trips list
+                await loadAndDisplayTrips();
+
+                alert('Поездка успешно создана!');
+            } catch (error) {
+                console.error('Error creating trip:', error);
+                alert('Ошибка создания поездки. Попробуйте еще раз.');
+            }
+        });
+
+        // Load and display trips
+        async function loadAndDisplayTrips() {
+            try {
+                trips = await TravelSplitDB.loadTrips();
+                displayTrips();
+            } catch (error) {
+                console.error('Error loading trips:', error);
+                document.getElementById('tripsList').innerHTML = '<p class="error">Ошибка загрузки поездок</p>';
+            }
+        }
+
+        // Display trips in the UI
+        function displayTrips() {
+            const tripsList = document.getElementById('tripsList');
+
+            if (trips.length === 0) {
+                tripsList.innerHTML = '<p class="no-trips">Пока нет созданных поездок</p>';
+                return;
+            }
+
+            tripsList.innerHTML = trips.map(trip => `
+                <div class="trip-card">
+                    <h3>${trip.name}</h3>
+                    <p><strong>Участники:</strong> ${trip.participants.join(', ')}</p>
+                    <p><strong>Расходов:</strong> ${trip.expenses ? trip.expenses.length : 0}</p>
+                    <p><strong>Создана:</strong> ${new Date(trip.createdAt).toLocaleDateString('ru-RU')}</p>
+                    <div class="trip-actions">
+                        <a href="trip.html?id=${trip.id}" class="btn btn-primary">Открыть</a>
+                        <button onclick="deleteTrip('${trip.id}')" class="btn btn-danger">Удалить</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Delete trip
+        async function deleteTrip(tripId) {
+            if (!confirm('Вы уверены, что хотите удалить эту поездку?')) {
+                return;
+            }
+
+            try {
+                await TravelSplitDB.deleteTrip(tripId);
+                await loadAndDisplayTrips();
+                alert('Поездка удалена');
+            } catch (error) {
+                console.error('Error deleting trip:', error);
+                alert('Ошибка удаления поездки');
+            }
+        }
+
+        // Listen for real-time updates
+        TravelSplitDB.listenForUpdates((updatedTrips) => {
+            trips = updatedTrips;
+            displayTrips();
+        });
+    </script>
 </body>
 </html>
