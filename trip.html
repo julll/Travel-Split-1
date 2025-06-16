@@ -3,242 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TravelSplit - Поездка</title>
+    <title>Travel Split - Поездка</title>
     <link rel="stylesheet" href="trip-styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
-        <!-- Заголовок поездки -->
-        <header class="trip-header">
-            <button class="btn-back" onclick="goBack()">
-                <i class="fas fa-arrow-left"></i>
-            </button>
-            <div class="trip-info">
-                <h1 id="trip-name">Загрузка...</h1>
-                <div class="trip-meta">
-                    <span id="trip-location" class="trip-location"></span>
-                    <span id="trip-dates" class="trip-dates"></span>
-                </div>
+        <header>
+            <div class="header-content">
+                <a href="index.html" class="back-btn">← Назад к поездкам</a>
+                <div class="firebase-badge offline">🔴 Офлайн</div>
             </div>
-            <div class="firebase-status">
-                <span class="firebase-badge">🔥</span>
-            </div>
+            <h1 id="tripName">Загрузка...</h1>
+            <p><strong>Участники:</strong> <span id="participantsList">Загрузка...</span></p>
         </header>
 
-        <!-- Основной контент -->
-        <main class="main-content">
-            <!-- Быстрые действия -->
-            <section class="quick-actions">
-                <button class="action-btn" onclick="showAddParticipantModal()">
-                    <i class="fas fa-user-plus"></i>
-                    <span>Участник</span>
-                </button>
-                <button class="action-btn" onclick="showAddExpenseModal()">
-                    <i class="fas fa-receipt"></i>
-                    <span>Расход</span>
-                </button>
-                <button class="action-btn" onclick="showTransferModal()">
-                    <i class="fas fa-exchange-alt"></i>
-                    <span>Перевод</span>
-                </button>
+        <main>
+            <section class="add-expense">
+                <h2>Добавить расход</h2>
+                <form id="expenseForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="description">Описание:</label>
+                            <input type="text" id="description" required placeholder="Например: Ужин в ресторане">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="amount">Сумма (₽):</label>
+                            <input type="number" id="amount" step="0.01" required placeholder="0.00">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="paidBy">Кто заплатил:</label>
+                            <select id="paidBy" required>
+                                <option value="">Выберите плательщика</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Участники расхода:</label>
+                            <div id="expenseParticipants" class="participants-checkboxes">
+                                <!-- Checkboxes will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit">Добавить расход</button>
+                </form>
             </section>
 
-            <!-- Балансы участников -->
-            <section class="balances-section">
-                <div class="section-header">
-                    <h2><i class="fas fa-balance-scale"></i> Балансы</h2>
-                </div>
-                <div class="balances-container">
-                    <div id="balances-list" class="balances-list">
-                        <!-- Балансы будут загружены динамически -->
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="balances-chart"></canvas>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Последние расходы -->
             <section class="expenses-section">
                 <div class="section-header">
-                    <h2><i class="fas fa-receipt"></i> Последние расходы</h2>
-                    <button class="btn btn-outline btn-sm" onclick="showAllExpenses()">
-                        <i class="fas fa-list"></i> Все расходы
-                    </button>
+                    <h2>Последние расходы</h2>
+                    <button onclick="showAllExpenses()" class="btn btn-secondary">Все расходы</button>
                 </div>
-                <div id="recent-expenses" class="recent-expenses">
-                    <!-- Расходы будут загружены динамически -->
+                <div id="expensesList" class="expenses-list">
+                    <p class="no-expenses">Пока нет добавленных расходов</p>
                 </div>
             </section>
 
-            <!-- Матрица долгов -->
-            <section class="debt-section">
-                <div class="section-header">
-                    <h2><i class="fas fa-exchange-alt"></i> Кто кому должен</h2>
-                </div>
-                <div id="debt-matrix" class="debt-matrix">
-                    <!-- Матрица будет загружена динамически -->
+            <section class="balances-section">
+                <div id="balances">
+                    <p class="no-balances">Добавьте расходы для расчета балансов</p>
                 </div>
             </section>
         </main>
     </div>
 
-    <!-- Модальные окна -->
-
-    <!-- Добавление участника -->
-    <div id="add-participant-modal" class="modal">
+    <!-- All Expenses Modal -->
+    <div id="allExpensesModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-user-plus"></i> Добавить участника</h3>
-                <span class="close" onclick="hideAddParticipantModal()">&times;</span>
-            </div>
-            <form id="add-participant-form" class="modal-form">
-                <div class="form-group">
-                    <label for="participant-name">Имя участника *</label>
-                    <input type="text" id="participant-name" name="name" required 
-                           placeholder="Например: Анна">
-                </div>
-                <div class="form-actions">
-                    <button type="button" class="btn btn-secondary" onclick="hideAddParticipantModal()">
-                        Отмена
-                    </button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Добавить
-                    </button>
-                </div>
-            </form>
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="allExpensesList"></div>
         </div>
     </div>
 
-    <!-- Добавление расхода -->
-    <div id="add-expense-modal" class="modal">
-        <div class="modal-content modal-large">
-            <div class="modal-header">
-                <h3><i class="fas fa-receipt"></i> Добавить расход</h3>
-                <span class="close" onclick="hideAddExpenseModal()">&times;</span>
-            </div>
-            <form id="add-expense-form" class="modal-form">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="expense-payer">Кто платил *</label>
-                        <select id="expense-payer" name="payer" required>
-                            <option value="">Выберите плательщика</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="expense-amount">Сумма *</label>
-                        <input type="number" id="expense-amount" name="amount" required 
-                               min="0" step="0.01" placeholder="0">
-                    </div>
-                </div>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
-                <div class="form-group">
-                    <label for="expense-description">Описание *</label>
-                    <input type="text" id="expense-description" name="description" required 
-                           placeholder="Например: Ужин в ресторане">
-                </div>
-
-                <div class="form-group">
-                    <label for="expense-date">Дата</label>
-                    <input type="date" id="expense-date" name="date">
-                </div>
-
-                <div class="form-group">
-                    <label>Как разделить расход?</label>
-                    <div class="radio-group">
-                        <label class="radio-label">
-                            <input type="radio" name="split-type" value="equal" checked>
-                            <span>Поровну между всеми</span>
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio" name="split-type" value="custom">
-                            <span>Указать суммы вручную</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div id="custom-splits" class="custom-splits" style="display: none;">
-                    <h4>Распределение по участникам:</h4>
-                    <div id="splits-container" class="splits-container">
-                        <!-- Поля для кастомного разделения -->
-                    </div>
-                    <div class="splits-summary">
-                        <span>Распределено: <strong id="splits-total">0</strong> ₽</span>
-                        <span>Остаток: <strong id="splits-remaining">0</strong> ₽</span>
-                    </div>
-                </div>
-
-                <div class="form-actions">
-                    <button type="button" class="btn btn-secondary" onclick="hideAddExpenseModal()">
-                        Отмена
-                    </button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Добавить расход
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Перевод денег -->
-    <div id="transfer-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-exchange-alt"></i> Перевод денег</h3>
-                <span class="close" onclick="hideTransferModal()">&times;</span>
-            </div>
-            <form id="transfer-form" class="modal-form">
-                <div class="form-group">
-                    <label for="transfer-from">От кого *</label>
-                    <select id="transfer-from" name="from" required>
-                        <option value="">Выберите отправителя</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="transfer-to">Кому *</label>
-                    <select id="transfer-to" name="to" required>
-                        <option value="">Выберите получателя</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="transfer-amount">Сумма *</label>
-                    <input type="number" id="transfer-amount" name="amount" required 
-                           min="0" step="0.01" placeholder="0">
-                </div>
-
-                <div class="form-actions">
-                    <button type="button" class="btn btn-secondary" onclick="hideTransferModal()">
-                        Отмена
-                    </button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-check"></i> Записать перевод
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Модальное окно всех расходов -->
-    <div id="all-expenses-modal" class="modal">
-        <div class="modal-content modal-large">
-            <div class="modal-header">
-                <h3><i class="fas fa-list"></i> Все расходы</h3>
-                <span class="close" onclick="hideAllExpensesModal()">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div id="all-expenses-list" class="all-expenses-list">
-                    <!-- Список всех расходов -->
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Подключение скриптов -->
-    <!-- 🔥 ИСПОЛЬЗУЕМ FIREBASE ВЕРСИЮ -->
+    <!-- App Scripts -->
     <script src="firebase-database.js"></script>
     <script src="trip.js"></script>
 </body>
