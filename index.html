@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TravelSplit - Учёт расходов в поездках</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Заголовок -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="app-title">
+                    <i class="fas fa-plane"></i>
+                    TravelSplit
+                    <span class="firebase-badge">🔥</span>
+                </h1>
+                <p class="app-subtitle">Учёт расходов в поездках с автосинхронизацией</p>
+            </div>
+
+            <!-- Панель управления данными (оставляем для резервного копирования) -->
+            <div class="data-controls">
+                <button class="btn btn-outline" onclick="exportData()" title="Экспорт данных">
+                    <i class="fas fa-download"></i> Экспорт
+                </button>
+                <button class="btn btn-outline" onclick="importData()" title="Импорт данных">
+                    <i class="fas fa-upload"></i> Импорт
+                </button>
+                <button class="btn btn-outline" onclick="shareData()" title="Поделиться данными">
+                    <i class="fas fa-share-alt"></i> Поделиться
+                </button>
+                <input type="file" id="import-file" accept=".json" style="display: none;">
+            </div>
+        </header>
+
+        <!-- Основной контент -->
+        <main class="main-content">
+            <!-- Кнопка создания поездки -->
+            <div class="create-trip-section">
+                <button class="btn btn-primary btn-large" onclick="showCreateTripModal()">
+                    <i class="fas fa-plus"></i>
+                    Создать новую поездку
+                </button>
+            </div>
+
+            <!-- Список поездок -->
+            <section class="trips-section">
+                <h2 class="section-title">
+                    <i class="fas fa-suitcase-rolling"></i>
+                    Мои поездки
+                </h2>
+                <div id="trips-list" class="trips-list">
+                    <!-- Поездки будут загружены динамически -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Модальное окно создания поездки -->
+    <div id="create-trip-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-plus"></i> Создать поездку</h3>
+                <span class="close" onclick="hideCreateTripModal()">&times;</span>
+            </div>
+            <form id="create-trip-form" class="modal-form">
+                <div class="form-group">
+                    <label for="trip-name">Название поездки *</label>
+                    <input type="text" id="trip-name" name="name" required 
+                           placeholder="Например: Отпуск в Сочи">
+                </div>
+
+                <div class="form-group">
+                    <label for="trip-location">Место</label>
+                    <input type="text" id="trip-location" name="location" 
+                           placeholder="Например: Сочи, Россия">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="trip-start-date">Дата начала</label>
+                        <input type="date" id="trip-start-date" name="startDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="trip-end-date">Дата окончания</label>
+                        <input type="date" id="trip-end-date" name="endDate">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="hideCreateTripModal()">
+                        Отмена
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Создать
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модальное окно редактирования поездки -->
+    <div id="edit-trip-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> Редактировать поездку</h3>
+                <span class="close" onclick="hideEditTripModal()">&times;</span>
+            </div>
+            <form id="edit-trip-form" class="modal-form">
+                <input type="hidden" id="edit-trip-id">
+
+                <div class="form-group">
+                    <label for="edit-trip-name">Название поездки *</label>
+                    <input type="text" id="edit-trip-name" name="name" required 
+                           placeholder="Например: Отпуск в Сочи">
+                </div>
+
+                <div class="form-group">
+                    <label for="edit-trip-location">Место</label>
+                    <input type="text" id="edit-trip-location" name="location" 
+                           placeholder="Например: Сочи, Россия">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="edit-trip-start-date">Дата начала</label>
+                        <input type="date" id="edit-trip-start-date" name="startDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-trip-end-date">Дата окончания</label>
+                        <input type="date" id="edit-trip-end-date" name="endDate">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="hideEditTripModal()">
+                        Отмена
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Сохранить
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Подключение скриптов -->
+    <!-- 🔥 ИСПОЛЬЗУЕМ FIREBASE ВЕРСИЮ -->
+    <script src="firebase-database.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
